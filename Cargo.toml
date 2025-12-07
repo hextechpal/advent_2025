@@ -1,3 +1,8 @@
+[[bin]]
+name="day_1"
+path="src/day1/main.rs"
+
+
 [package]
 name = "advent_2025"
 version = "0.1.0"
