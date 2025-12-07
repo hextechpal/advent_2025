@@ -1,11 +1,22 @@
 use std::fs;
 
-enum Movement {
-    Right(i32),
-    Left(i32),
+enum Direction {
+    Right,
+    Left,
 }
 
-impl<T: ToString> From<T> for Movement {
+pub struct Turn {
+    dir: Direction,
+    ticks: i32,
+}
+
+impl Turn {
+    fn new(dir: Direction, ticks: i32) -> Self {
+        Self { dir, ticks }
+    }
+}
+
+impl<T: ToString> From<T> for Turn {
     fn from(value: T) -> Self {
         let binding = value.to_string();
         let mut chars = binding.chars();
@@ -13,11 +24,11 @@ impl<T: ToString> From<T> for Movement {
             Some(c) => match c {
                 'L' => {
                     let ticks = i32::from_str_radix(chars.as_str(), 10).expect("malformed string");
-                    Movement::Left(ticks % 100)
+                    Self::new(Direction::Left, ticks)
                 }
                 'R' => {
                     let ticks = i32::from_str_radix(chars.as_str(), 10).expect("malformed string");
-                    Movement::Right(ticks % 100)
+                    Self::new(Direction::Right, ticks)
                 }
                 _ => panic!("malformed string"),
             },
@@ -29,7 +40,7 @@ impl<T: ToString> From<T> for Movement {
 
 struct Dial {
     pos: i32,
-    zeroes: usize,
+    zeroes: i32,
 }
 
 impl Dial {
@@ -37,34 +48,41 @@ impl Dial {
         Self { pos: 50, zeroes: 0 }
     }
 
-    pub fn turn(&mut self, movement: Movement) {
-        match movement {
-            Movement::Right(ticks) => {
+    pub fn turn(&mut self, turn: Turn) {
+        self.zeroes += turn.ticks / 100;
+        let ticks = turn.ticks % 100;
+        match turn.dir {
+            Direction::Right => {
                 self.pos += ticks;
-                if self.pos < 0 {
-                    self.pos += 100;
-                }
-                self.pos %= 100;
-                if self.pos == 0 {
-                    self.zeroes += 1;
+                if self.pos > 100 {
+                    self.zeroes += 1
                 }
             }
 
-            Movement::Left(ticks) => {
+            Direction::Left => {
+                let prev = self.pos;
                 self.pos -= ticks;
                 if self.pos < 0 {
                     self.pos += 100;
-                }
-                self.pos %= 100;
-                if self.pos == 0 {
-                    self.zeroes += 1;
+                    if prev != 0 {
+                        self.zeroes += 1
+                    }
                 }
             }
         }
+
+        self.pos %= 100;
+        if self.pos == 0 {
+            self.zeroes += 1;
+        }
     }
 
-    pub fn zeroes(&self) -> usize {
+    pub fn zeroes(&self) -> i32 {
         self.zeroes
+    }
+
+    pub fn pos(&self) -> i32 {
+        self.pos
     }
 }
 
@@ -72,8 +90,9 @@ fn main() {
     let mut dial = Dial::new();
     let contents = fs::read_to_string("input/input.txt").expect("unable to read inout file");
     for line in contents.lines() {
-        let m = Movement::from(line);
+        let m = Turn::from(line);
         dial.turn(m);
+        println!("pos: {}, zeroes: {}", dial.pos(), dial.zeroes());
     }
-    println!("{}", dial.zeroes());
+    // println!("{}", dial.zeroes());
 }
