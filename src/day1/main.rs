@@ -88,7 +88,7 @@ impl Dial {
 
 fn main() {
     let mut dial = Dial::new();
-    let contents = fs::read_to_string("input/input.txt").expect("unable to read inout file");
+    let contents = fs::read_to_string("input/day1/input.txt").expect("unable to read input file");
     for line in contents.lines() {
         let m = Turn::from(line);
         dial.turn(m);
