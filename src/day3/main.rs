@@ -1,12 +1,14 @@
 use std::fs;
 
-pub struct Bank<'a> {
-    s: &'a str,
+pub struct Bank {
+    digits: Vec<u32>,
 }
 
-impl<'a> Bank<'a> {
-    fn new(s: &'a str) -> Self {
-        Self { s }
+impl Bank {
+    fn new(s: &str) -> Self {
+        Self {
+            digits: s.chars().filter_map(|c| c.to_digit(10)).collect(),
+        }
     }
 
     fn joltage(&self) -> i32 {
@@ -14,22 +16,20 @@ impl<'a> Bank<'a> {
         let mut sec_max = 0;
         let mut idx = 0;
 
-        let digits: Vec<u32> = self.s.chars().filter_map(|c| c.to_digit(10)).collect();
-
-        for (i, b) in digits[0..digits.len()-1].iter().enumerate() {
+        for (i, b) in self.digits[0..self.digits.len() - 1].iter().enumerate() {
             if max < *b {
                 max = *b;
                 idx = i;
             }
         }
 
-        for b in digits[idx+1..].iter() {
+        for b in self.digits[idx + 1..].iter() {
             if sec_max < *b {
                 sec_max = *b;
             }
         }
 
-        println!("{} {max} {sec_max}", self.s);
+        // println!("{max} {sec_max}");
         (10 * max + sec_max).try_into().unwrap()
     }
 }
