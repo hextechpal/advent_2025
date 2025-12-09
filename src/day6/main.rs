@@ -1,7 +1,7 @@
 use std::fs;
 
 fn main() {
-    let contents = fs::read_to_string("input/day6/input.txt").expect("unable to read input file");
+    let contents = fs::read_to_string("input/day6/input_test.txt").expect("unable to read input file");
 
     let mut it = contents.lines().peekable();
 
@@ -14,7 +14,7 @@ fn main() {
                 .filter(|&el| !el.is_empty())
                 .collect::<Vec<_>>();
         } else {
-            row_iters.push(line.split(' ').filter(|&el| !el.is_empty()));
+            row_iters.push(line.split(' '));
         }
     }
 
@@ -27,6 +27,7 @@ fn main() {
         })
         .collect::<Vec<_>>();
 
+    println!("{grid:?}");
     let mut ans = 0;
     for (i, &op) in ops.iter().enumerate() {
         let nums = grid[i]
