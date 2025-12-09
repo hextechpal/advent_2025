@@ -10,10 +10,10 @@ fn main() {
             intervals = merge(intervals.clone());
             println!("{:?}", intervals);
 
-            for (x, y) in intervals{
-                ans += y-x+1;
+            for (x, y) in intervals {
+                ans += y - x + 1;
             }
-    
+
             break;
         }
 
@@ -64,6 +64,7 @@ fn merge(intervals: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
     ans
 }
 
+#[allow(dead_code)]
 fn find(intervals: &Vec<(i64, i64)>, target: i64) -> bool {
     let mut l = 0 as i32;
     let mut r = (intervals.len() - 1) as i32;
