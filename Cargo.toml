@@ -18,6 +18,10 @@ path = "src/day4/main.rs"
 name = "day5"
 path = "src/day5/main.rs"
 
+[[bin]]
+name = "day6"
+path = "src/day6/main.rs"
+
 [package]
 name = "advent_2025"
 version = "0.1.0"
