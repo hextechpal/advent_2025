@@ -2,39 +2,28 @@ use std::cmp::Ordering;
 use std::fs;
 
 fn main() {
-    let contents =
-        fs::read_to_string("input/day5/input.txt").expect("unable to read input file");
-    let mut test_input = false;
+    let contents = fs::read_to_string("input/day5/input.txt").expect("unable to read input file");
     let mut ans = 0;
     let mut intervals = Vec::new();
     for line in contents.lines() {
         if line.is_empty() {
-            test_input = true;
             intervals = merge(intervals.clone());
             println!("{:?}", intervals);
 
-            
-
-            continue;
+            for (x, y) in intervals{
+                ans += y-x+1;
+            }
+    
+            break;
         }
 
-        if test_input {
-            let target = line.parse::<i64>().unwrap();
-            if find(&intervals, target) {
-                println!("found={target}");
-                ans += 1;
-            }else{
-                println!("not_found={target}");    
-            }
-        } else {
-            let split = line.split('-').collect::<Vec<_>>();
-            if split.len() != 2 {
-                panic!("malformed input");
-            }
-            let left = split[0].parse::<i64>().unwrap();
-            let right = split[1].parse::<i64>().unwrap();
-            intervals.push((left, right));
+        let split = line.split('-').collect::<Vec<_>>();
+        if split.len() != 2 {
+            panic!("malformed input");
         }
+        let left = split[0].parse::<i64>().unwrap();
+        let right = split[1].parse::<i64>().unwrap();
+        intervals.push((left, right));
     }
     println!("{ans}");
 }
