@@ -26,9 +26,14 @@ path = "src/day6/main.rs"
 name = "day7"
 path = "src/day7/main.rs"
 
+[[bin]]
+name = "day8"
+path = "src/day8/main.rs"
+
 [package]
 name = "advent_2025"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+rust_decimal = "1.39.0"
