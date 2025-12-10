@@ -1,5 +1,3 @@
-use std::cmp::Reverse;
-use std::collections::BinaryHeap;
 use std::fs;
 use std::hash::Hash;
 
@@ -90,12 +88,12 @@ impl DisjointSet {
         self.parent[x]
     }
 
-    fn union(&mut self, a: usize, b: usize) {
+    fn union(&mut self, a: usize, b: usize) -> bool {
         let mut ra = self.find(a);
         let mut rb = self.find(b);
 
         if ra == rb {
-            return;
+            return false;
         }
 
         // union by size
@@ -106,6 +104,7 @@ impl DisjointSet {
         self.parent[rb] = ra;
         self.size[ra] += self.size[rb];
         self.count -= 1;
+        true
     }
 }
 
@@ -123,21 +122,22 @@ fn main() {
     }
 
     let mut ds = DisjointSet::new(n);
+    pairs.sort();
 
-    // Min-heap using Reverse()
-    let mut heap = BinaryHeap::new();
-    for p in pairs {
-        heap.push(Reverse(p));
-    }
+    // pairs.select_nth_unstable(1000);
 
-    while let Some(Reverse(pair)) = heap.pop() {
-        ds.union(pair.i, pair.j);
-
-        if ds.count == 1 {
-            let p1 = points[pair.i];
-            let p2 = points[pair.j];
+    let mut ec = 0;
+    for i in 0..pairs.len() {
+        if ec == n - 1 {
+            let last = pairs[i-1];
+            let p1 = points[last.i];
+            let p2 = points[last.j];
             println!("{}", p1.x * p2.x);
             break;
+        }
+        let pair = pairs[i];
+        if ds.union(pair.i, pair.j) {
+            ec += 1;
         }
     }
 }
