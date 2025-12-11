@@ -124,8 +124,6 @@ fn main() {
     let mut ds = DisjointSet::new(n);
     pairs.sort();
 
-    // pairs.select_nth_unstable(1000);
-
     let mut ec = 0;
     for i in 0..pairs.len() {
         if ec == n - 1 {
