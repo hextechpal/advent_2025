@@ -108,9 +108,7 @@ impl ConvexHull {
 }
 
 mod tests {
-    use super::ConvexHull;
-    use super::Point;
-    use super::Turn;
+    use super::*;
 
     #[test]
     fn test_ccw() {
