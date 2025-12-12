@@ -1,7 +1,9 @@
-use convex_hull::{ConvexHull, Point};
+use convex_hull::ConvexHull;
+use point::Point;
 use std::fs;
 
 mod convex_hull;
+mod point;
 
 fn main() {
     let contents = fs::read_to_string("input/day9/input.txt").expect("unable to read input file");
